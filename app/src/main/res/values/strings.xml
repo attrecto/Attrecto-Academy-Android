@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Barkochba</string>
+    <string name="guess">Guess my number between 1-20!</string>
+    <string name="ok">OK</string>
+    <string name="new_game">New Game</string>
+    <string name="bigger">My number is bigger!</string>
+    <string name="smaller">My number is smaller!</string>
+    <string name="congrats">Congratulations!</string>
+    <string name="go">Let\'s go!</string>
+    <string name="numberformatexception">Please give me a decimal number!</string>
+</resources>
