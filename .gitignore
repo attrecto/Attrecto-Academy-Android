@@ -1,0 +1,11 @@
+*.iml
+.gradle
+/local.properties
+.DS_Store
+/captures
+.externalNativeBuild
+.idea/
+**/build
+# Design folder for delivering assets on Design branch.
+DesignDrop/
+*.hprof
