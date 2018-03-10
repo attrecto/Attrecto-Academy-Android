@@ -3,7 +3,7 @@ package com.attrecto.list;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.attrecto.list.data.ShoppingListProvider;
@@ -24,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = binding.recyclerView;
 
-        // TODO #3: create layout manager
-        RecyclerView.LayoutManager layoutManager = null;
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ShoppingListAdapter(shoppingListProvider.getShoppingList(LIST_ITEM_NUMBER)));
