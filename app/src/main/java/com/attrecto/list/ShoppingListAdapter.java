@@ -26,6 +26,20 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private ViewShoppingItemBinding binding;
 
+        private ViewHolder( ViewShoppingItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public static ViewHolder create(ViewGroup parent){
+            ViewShoppingItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.view_shopping_item, parent, false);
+            return new ViewHolder(binding);
+        }
+
+        public void bind(ShoppingListItem item){
+            binding.setContent(item);
+        }
     }
 }
