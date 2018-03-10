@@ -17,16 +17,22 @@ import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
-    private List<ShoppingListItem> items;
+    public interface Observer{
+        void onClick(ShoppingListItem item);
+    }
 
-    public ShoppingListAdapter(@NonNull List<ShoppingListItem> items) {
+    private List<ShoppingListItem> items;
+    private Observer observer;
+
+    public ShoppingListAdapter(@NonNull List<ShoppingListItem> items, Observer observer) {
         super();
         this.items = items;
+        this.observer = observer;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolder.create(parent);
+        return ViewHolder.create(parent, observer);
     }
 
     @Override
@@ -41,19 +47,22 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ViewShoppingItemBinding binding;
+        private Observer observer;
 
-        private ViewHolder( ViewShoppingItemBinding binding) {
+        private ViewHolder(ViewShoppingItemBinding binding, Observer observer) {
             super(binding.getRoot());
             this.binding = binding;
+            this.observer = observer;
         }
 
-        public static ViewHolder create(ViewGroup parent){
+        public static ViewHolder create(ViewGroup parent, Observer observer){
             ViewShoppingItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.view_shopping_item, parent, false);
-            return new ViewHolder(binding);
+            return new ViewHolder(binding, observer);
         }
 
         public void bind(ShoppingListItem item){
             binding.setContent(item);
+            binding.setObserver(observer);
         }
     }
 }
