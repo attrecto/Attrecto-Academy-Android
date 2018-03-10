@@ -4,9 +4,12 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.attrecto.list.data.ShoppingListHeader;
 import com.attrecto.list.data.ShoppingListItem;
+import com.attrecto.list.databinding.ViewShoppingHeaderBinding;
 import com.attrecto.list.databinding.ViewShoppingItemBinding;
 
 import java.util.List;
@@ -17,14 +20,20 @@ import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
-    public interface Observer{
+    public interface Observer {
         void onClick(ShoppingListItem item);
     }
 
-    private List<ShoppingListItem> items;
+    public interface Item {
+    }
+
+    private List<Item> items;
     private Observer observer;
 
-    public ShoppingListAdapter(@NonNull List<ShoppingListItem> items, Observer observer) {
+    private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_HEADER = 2;
+
+    public ShoppingListAdapter(@NonNull List<Item> items, Observer observer) {
         super();
         this.items = items;
         this.observer = observer;
@@ -32,7 +41,15 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolder.create(parent, observer);
+        switch (viewType) {
+            case VIEW_TYPE_ITEM:
+                return ItemViewHolder.create(parent, observer);
+            case VIEW_TYPE_HEADER:
+                return HeaderViewHolder.create(parent);
+            default:
+                return null;
+
+        }
     }
 
     @Override
@@ -45,24 +62,63 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (items.get(position) instanceof ShoppingListHeader) {
+            return VIEW_TYPE_HEADER;
+        } else if (items.get(position) instanceof ShoppingListItem) {
+            return VIEW_TYPE_ITEM;
+        }
+
+        throw new ClassCastException();
+    }
+
+    public static abstract class ViewHolder<T extends Item> extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public abstract void bind(T item);
+    }
+
+    public static class ItemViewHolder extends ViewHolder<ShoppingListItem> {
         private ViewShoppingItemBinding binding;
         private Observer observer;
 
-        private ViewHolder(ViewShoppingItemBinding binding, Observer observer) {
+        private ItemViewHolder(ViewShoppingItemBinding binding, Observer observer) {
             super(binding.getRoot());
             this.binding = binding;
             this.observer = observer;
         }
 
-        public static ViewHolder create(ViewGroup parent, Observer observer){
+        public static ItemViewHolder create(ViewGroup parent, Observer observer) {
             ViewShoppingItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.view_shopping_item, parent, false);
-            return new ViewHolder(binding, observer);
+            return new ItemViewHolder(binding, observer);
         }
 
-        public void bind(ShoppingListItem item){
+        @Override
+        public void bind(ShoppingListItem item) {
             binding.setContent(item);
             binding.setObserver(observer);
+        }
+    }
+
+    public static class HeaderViewHolder extends ViewHolder<ShoppingListHeader> {
+        private ViewShoppingHeaderBinding binding;
+
+        private HeaderViewHolder(ViewShoppingHeaderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public static HeaderViewHolder create(ViewGroup parent) {
+            ViewShoppingHeaderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.view_shopping_header, parent, false);
+            return new HeaderViewHolder(binding);
+        }
+
+        @Override
+        public void bind(ShoppingListHeader item) {
+            binding.setContent(item);
         }
     }
 }
