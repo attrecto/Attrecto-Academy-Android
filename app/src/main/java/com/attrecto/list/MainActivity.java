@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
+import com.attrecto.list.data.ShoppingListItem;
 import com.attrecto.list.data.ShoppingListProvider;
 import com.attrecto.list.databinding.ActivityMainBinding;
 
@@ -27,7 +29,12 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ShoppingListAdapter(shoppingListProvider.getShoppingList(LIST_ITEM_NUMBER)));
+        recyclerView.setAdapter(new ShoppingListAdapter(shoppingListProvider.getShoppingList(LIST_ITEM_NUMBER), new ShoppingListAdapter.Observer() {
+            @Override
+            public void onClick(ShoppingListItem item) {
+                Toast.makeText(MainActivity.this, item.name, Toast.LENGTH_SHORT).show();
+            }
+        }));
 
     }
 }
