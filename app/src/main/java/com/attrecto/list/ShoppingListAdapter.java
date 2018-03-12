@@ -17,11 +17,17 @@ import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
-    private List<ShoppingListItem> items;
+    public interface Observer{
+        void onClick(ShoppingListItem item);
+    }
 
-    public ShoppingListAdapter(@NonNull List<ShoppingListItem> items) {
+    private List<ShoppingListItem> items;
+    private Observer observer;
+
+    public ShoppingListAdapter(@NonNull List<ShoppingListItem> items, Observer observer) {
         super();
         this.items = items;
+        this.observer = observer;
     }
 
     @Override
