@@ -24,6 +24,13 @@
             android:textSize="32sp"
             tools:text="City Name" />
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="fitCenter" />
+
         <TextView
             android:id="@+id/weatherDescriptionTextView"
             android:layout_width="match_parent"
@@ -52,26 +59,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/errorContainer"
+    <TextView
+        android:id="@+id/errorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <TextView
-            android:id="@+id/errorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="Error description "
-            tools:alpha="0.5"/>
-    </LinearLayout>
+        android:gravity="center"
+        android:padding="16dp"
+        tools:alpha="0.5"
+        tools:text="Error description" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        tools:alpha="0.2"/>
+        tools:alpha="0.2" />
 </RelativeLayout>

@@ -15,6 +15,7 @@ public class OpenWeatherMap {
     private static final String CITY_ID_PRAMETER_NAME= "id";
 
     private static final String WEATHER_BY_CITY_ID_URL = "http://api.openweathermap.org/data/2.5/weather";
+    private static final String ICON_URL = "http://openweathermap.org/img/w/%s.png";
 
     private static OpenWeatherMap instance;
 
@@ -44,7 +45,12 @@ public class OpenWeatherMap {
 
         Response response = client.newCall(request).execute();
         String jsonString = response.body().string();
+        response.close();
 
         return new Gson().fromJson(jsonString, CurrentWeather.class);
+    }
+
+    public String getWeatherIconUrl(String icon){
+        return String.format(ICON_URL, icon);
     }
 }
