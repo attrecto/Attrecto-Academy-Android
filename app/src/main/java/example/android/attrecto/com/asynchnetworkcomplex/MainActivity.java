@@ -1,6 +1,7 @@
 package example.android.attrecto.com.asynchnetworkcomplex;
 
 import android.annotation.SuppressLint;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,24 +13,21 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
+import example.android.attrecto.com.asynchnetworkcomplex.databinding.ActivityMainBinding;
 import example.android.attrecto.com.asynchnetworkcomplex.openweathermap.CurrentWeather;
 import example.android.attrecto.com.asynchnetworkcomplex.openweathermap.OpenWeatherMap;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CITY_ID_GYOR_MOSON_SOPRON_MEGYE = 3051977;
 
-    private AsyncTask<Void, Void, CurrentWeather> loadAsyncTask;
+    private AsyncTask<Void, Void, CurrentWeatherViewContent> loadAsyncTask;
 
     private View contentView;
     private View loadingView;
 
     private TextView errorTextView;
 
-    private TextView cityNameTextView;
-    private TextView weatherDescriptionTextView;
-    private TextView windSpeedTextView;
-
-    private ImageView imageView;
+    ActivityMainBinding binding;
 
 
     @Override
@@ -57,21 +55,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         contentView = findViewById(R.id.contentContainer);
         loadingView = findViewById(R.id.progressBar);
         errorTextView = findViewById(R.id.errorTextView);
-
-        cityNameTextView = findViewById(R.id.cityNameTextView);
-        weatherDescriptionTextView = findViewById(R.id.weatherDescriptionTextView);
-        windSpeedTextView = findViewById(R.id.windSpeedTextView);
-        imageView = findViewById(R.id.imageView);
     }
 
     @SuppressLint("StaticFieldLeak")
     private void loadWeatherInfo() {
-        loadAsyncTask = new AsyncTask<Void, Void, CurrentWeather>() {
+        loadAsyncTask = new AsyncTask<Void, Void, CurrentWeatherViewContent>() {
             private Exception exception;
 
             @Override
@@ -81,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected CurrentWeather doInBackground(Void... voids) {
+            protected CurrentWeatherViewContent doInBackground(Void... voids) {
                 try {
-                    return OpenWeatherMap.getInstance().getCurrentWeather(CITY_ID_GYOR_MOSON_SOPRON_MEGYE);
+                    return new MainActivityPresenter().getCurrentWeather(CITY_ID_GYOR_MOSON_SOPRON_MEGYE);
                 } catch (IOException e) {
                     exception = e;
                     return null;
@@ -91,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(CurrentWeather currentWeather) {
-                super.onPostExecute(currentWeather);
+            protected void onPostExecute(CurrentWeatherViewContent currentWeatherViewContent) {
+                super.onPostExecute(currentWeatherViewContent);
                 loadAsyncTask = null;
                 if (!isFinishing()) {
-                    if (currentWeather != null) {
-                        displayContent(currentWeather);
+                    if (currentWeatherViewContent != null) {
+                        displayContent(currentWeatherViewContent);
                     } else {
                         displayError(exception);
                     }
@@ -117,17 +110,12 @@ public class MainActivity extends AppCompatActivity {
         errorTextView.setVisibility(View.GONE);
     }
 
-    private void displayContent(CurrentWeather currentWeather) {
+    private void displayContent(CurrentWeatherViewContent currentWeatherViewContent) {
         contentView.setVisibility(View.VISIBLE);
         loadingView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
 
-        cityNameTextView.setText(currentWeather.name);
-        weatherDescriptionTextView.setText(currentWeather.weather.get(0).description);
-        windSpeedTextView.setText(currentWeather.wind.speed + "km/h");
-
-        Picasso.get().load(OpenWeatherMap.getInstance().getWeatherIconUrl(currentWeather.weather.get(0).icon))
-                .into(imageView);
+        binding.setCurrentWeather(currentWeatherViewContent);
     }
 
     private void displayError(Exception exception) {
