@@ -1,5 +1,6 @@
 package fragmentexample.android.attrecto.com.fragmentexample;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +16,16 @@ import android.widget.TextView;
  */
 
 public class DetailFragment extends Fragment {
+    public void setParam(String param){
+        Bundle args = new Bundle();
+        args.putString("parameter", param);
+        setArguments(args);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
     @Override
@@ -30,7 +36,13 @@ public class DetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String param = getActivity().getIntent().getStringExtra("parameter");
+        Bundle args = getArguments();
+
+        String param = null;
+        if(args != null) {
+            param = getArguments().getString("parameter");
+        }
+
         if(param == null){
             param = "No button pressed, yet";
         }

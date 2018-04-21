@@ -23,31 +23,26 @@ public class MasterFragment extends Fragment {
     }
 
     private void initView(View view){
+        final MainActivity  mainActivity = (MainActivity) getActivity();
         view.findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDetail("Button 1 was clicked");
+                mainActivity.openDetail("Button 1 was clicked");
             }
         });
 
         view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDetail("Button 2 was clicked");
+                mainActivity.openDetail("Button 2 was clicked");
             }
         });
 
         view.findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDetail("Button 3 was clicked");
+                mainActivity.openDetail("Button 3 was clicked");
             }
         });
-    }
-
-    private void openDetail(String param){
-        Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra("parameter", param);
-        startActivity(intent);
     }
 }
