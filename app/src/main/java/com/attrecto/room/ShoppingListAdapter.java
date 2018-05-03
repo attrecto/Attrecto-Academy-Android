@@ -1,4 +1,4 @@
-package com.attrecto.list;
+package com.attrecto.room;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
@@ -7,16 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.attrecto.list.data.ShoppingListHeader;
-import com.attrecto.list.data.ShoppingListItem;
-import com.attrecto.list.databinding.ViewShoppingHeaderBinding;
-import com.attrecto.list.databinding.ViewShoppingItemBinding;
+import com.attrecto.room.data.ShoppingListHeader;
+import com.attrecto.room.data.ShoppingListItem;
+import com.attrecto.room.databinding.ViewShoppingHeaderBinding;
+import com.attrecto.room.databinding.ViewShoppingItemBinding;
 
 import java.util.List;
-
-/**
- * Created by balazsnemeth on 2018. 03. 10..
- */
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
@@ -62,6 +58,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return items.size();
     }
 
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public void deleteAllItems() {
+        items.clear();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (items.get(position) instanceof ShoppingListHeader) {
@@ -69,7 +73,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         } else if (items.get(position) instanceof ShoppingListItem) {
             return VIEW_TYPE_ITEM;
         }
-
         throw new ClassCastException();
     }
 
@@ -77,7 +80,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         public ViewHolder(View itemView) {
             super(itemView);
         }
-
         public abstract void bind(T item);
     }
 
@@ -121,4 +123,5 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             binding.setContent(item);
         }
     }
+
 }

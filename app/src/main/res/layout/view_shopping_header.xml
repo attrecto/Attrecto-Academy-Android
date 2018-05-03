@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="observer"
-            type="com.attrecto.list.ShoppingListAdapter.Observer" />
+            type="com.attrecto.room.ShoppingListAdapter.Observer" />
         <variable
             name="content"
-            type="com.attrecto.list.data.ShoppingListHeader" />
+            type="com.attrecto.room.data.ShoppingListHeader" />
     </data>
 
     <LinearLayout
