@@ -58,14 +58,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return items.size();
     }
 
-    public void addItem(Item item) {
-        items.add(item);
-    }
-
-    public void deleteAllItems() {
-        items.clear();
-    }
-
     @Override
     public int getItemViewType(int position) {
         if (items.get(position) instanceof ShoppingListHeader) {
