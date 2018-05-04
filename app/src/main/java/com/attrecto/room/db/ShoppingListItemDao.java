@@ -14,16 +14,10 @@ public interface ShoppingListItemDao {
     @Query("SELECT * FROM ShoppingListItem")
     List<ShoppingListItem> getAll();
 
-    @Query("SELECT * FROM shoppinglistitem WHERE id IN (:itemIds)")
-    List<ShoppingListItem> loadAllByIds(int[] itemIds);
-
-    @Query("SELECT * FROM ShoppingListItem WHERE name LIKE :name LIMIT 1")
-    ShoppingListItem findByName(String name);
-
     @Insert
     void insertAll(ShoppingListItem... items);
 
     @Query("DELETE FROM ShoppingListItem")
-    public void deleteAll();
+    void deleteAll();
 
 }
